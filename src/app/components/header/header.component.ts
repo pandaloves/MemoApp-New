@@ -1,5 +1,5 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { Router, RouterLink } from '@angular/router';
+import { RouterLink, RouterOutlet } from '@angular/router';
 import { jwtDecode } from 'jwt-decode';
 import { ThemeService } from '../../services/ThemeService';
 import { ToastrService } from 'ngx-toastr';
@@ -8,7 +8,7 @@ import { StorageService } from '../../services/storage.service';
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [RouterLink],
+  imports: [RouterOutlet, RouterLink],
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.css'],
 })
@@ -19,7 +19,6 @@ export class HeaderComponent implements OnInit {
   username: string | null = null;
   toaster = inject(ToastrService);
   storageService = inject(StorageService);
-  router = inject(Router); // Moved router declaration to the top with inject()
 
   constructor(private themeService: ThemeService) {}
 
@@ -46,7 +45,6 @@ export class HeaderComponent implements OnInit {
   // Retrieve the username from the token
   getUsernameFromToken() {
     const token = this.storageService.getItem('token');
-
     if (token) {
       try {
         const decodedToken: any = jwtDecode(token);
@@ -61,10 +59,11 @@ export class HeaderComponent implements OnInit {
   // Log out the user
   logOut() {
     this.storageService.removeItem('token');
-
     this.toaster.error('Loggat ut framgångsrikt!');
 
-    this.router.navigate(['/login']);
+    setTimeout(() => {
+      window.location.href = '/login';
+    }, 2000);
   }
 
   // Toggle the theme
