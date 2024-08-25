@@ -7,6 +7,7 @@ import {
 import { inject } from '@angular/core';
 import { StorageService } from '../services/storage.service';
 
+
 export const authGuard: CanActivateFn = (
   route: ActivatedRouteSnapshot,
   state: RouterStateSnapshot
@@ -17,10 +18,14 @@ export const authGuard: CanActivateFn = (
   const publicRoutes: string[] = ['/login', '/signup'];
   const token = storageService.getItem('token');
 
-  if (publicRoutes.includes(state.url) || token) {
+  if (token) {
     return true;
   } else {
-    router.navigate(['/login']);
-    return false;
+    if (!publicRoutes.includes(state.url)) {
+      router.navigate(['/login']);
+      return false;
+    } else {
+      return true;
+    }
   }
 };

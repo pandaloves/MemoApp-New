@@ -1,17 +1,7 @@
 <div>
   <app-header *ngIf="showHeader"></app-header>
-
-  <div>
-    <ng-container *ngIf="isLoading; else content">
-      <div class="loading-spinner">
-        <i class="fa-sharp-duotone fa-solid fa-spinner-third"></i>
-      </div>
-    </ng-container>
-
-    <ng-template #content>
-      <router-outlet></router-outlet>
-    </ng-template>
+  <div class="wrapper">
+    <router-outlet></router-outlet>
   </div>
-
   <app-footer *ngIf="showFooter"></app-footer>
 </div>
